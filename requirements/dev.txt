@@ -1,2 +1,0 @@
-Django==4.2.10
-django-debug-toolbar==4.3.0
