@@ -4,4 +4,10 @@ from django.http import HttpResponse
 
 # Create your views here.
 def home(request):
-    return HttpResponse("<body>Главная</body>")
+    template = 'homepage/home.html'
+    context = {}
+    return render(request, template, context)
+
+
+def cofee(request):
+    return HttpResponse(status=418)
