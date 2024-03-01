@@ -12,14 +12,14 @@ def custom_text_validator(value):
         )
 
 
-def custom_slug_validator(value):
-    value = value.lower()
-    Slug_alphabet = list(map(str, range(10))) + list(ascii_lowercase) + ['-', '_']
-    for elem in value:
-        if elem not in Slug_alphabet:
-            raise django.core.exceptions.ValidationError(
-                'В тексте могут использоваться только цифры, буквы латиницы, символы - и _',
-            )
+# def custom_slug_validator(value):
+#     value = value.lower()
+#     Slug_alphabet = list(map(str, range(10))) + list(ascii_lowercase) + ['-', '_']
+#     for elem in value:
+#         if elem not in Slug_alphabet:
+#             raise django.core.exceptions.ValidationError(
+#                 'В тексте могут использоваться только цифры, буквы латиницы, символы - и _',
+#             )
 
 
 # class AbstractModel(django.db.models.Model):
