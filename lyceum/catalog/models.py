@@ -1,10 +1,10 @@
 import django.db.models
+# import thumbnail
 from django.db import models
 import django.core.validators
 import django.core.exceptions
-from string import ascii_lowercase
-
-
+# from string import ascii_lowercase
+# from thumbnail import get_thumbnail
 def custom_text_validator(value):
     if ('превосходно' not in value) and ('роскошно' not in value):
         raise django.core.exceptions.ValidationError(
@@ -124,3 +124,33 @@ class Item(AbstractModel):
 
     def __str__(self):
         return self.name[:15]
+
+
+# class MyModel(models.Model):
+#     upload = models.ImageField(upload_to='uploads/')
+#
+#     upload = models.ImageField(upload_to='uploads/% Y/% m/% d/')
+
+# class ImageModel(models.Model):
+#     image = models.ImageField(
+#         'Будет приведено к ширине 1280px',
+#         upload_to='catalog/',
+#     )
+#
+#     def get_image_1280(self):
+#         return get_thumbnail(self.image, '1280', quality=51)
+#
+#     def get_image_400_300(self):
+#         return get_thumbnail(self.image, '400*300', crop='center', quality=51)
+#
+#     def image_tmb(self):
+#         if self.image:
+#             return mark_safe(
+#                 f'<img src="{self.image.url}" width="50">'
+#             )
+#         return 'Нет изображения'
+#     image_tmb.short_description = 'превью'
+#     image_tmb.allow_tags = True
+#     list_display = (
+#         'image_tmb'
+#     )
