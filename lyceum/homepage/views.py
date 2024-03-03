@@ -1,3 +1,5 @@
+import http
+
 from django.shortcuts import render
 from django.http import HttpResponse
 
@@ -9,5 +11,8 @@ def home(request):
     return render(request, template, context)
 
 
-def cofee(request):
-    return HttpResponse(status=418)
+def coffee(request):
+    return HttpResponse(
+        "<h1>Я чайник</h1>",
+        status=http.HTTPStatus.IM_A_TEAPOT,
+    )
