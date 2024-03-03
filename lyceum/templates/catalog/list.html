@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Это страница со списком товаров</h1>
-
-    <a href="{% url 'catalog:item_list' %}">
-        Страница со списком товаров
-    </a>
-    <br>
-    <a href="{% url 'catalog:item_detail' 1 %}">
-        Первый елемент
-    </a>
+    <div class="container">
+        <h1>Это страница со списком товаров</h1>
+        <a href="{% url 'catalog:item_list' %}">
+            Страница со списком товаров
+        </a>
+        <br>
+        <a href="{% url 'catalog:item_detail' 1 %}">
+            Первый елемент
+        </a>
+    </div>
 {% endblock %}
