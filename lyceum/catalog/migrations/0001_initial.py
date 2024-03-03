@@ -124,7 +124,7 @@ class Migration(migrations.Migration):
                     models.TextField(
                         blank=True,
                         help_text="Опишите объект",
-                        validators=[catalog.models.custom_text_validator],
+                        validators=[catalog.validators.custom_text_validator],
                         verbose_name="Текст",
                     ),
                 ),

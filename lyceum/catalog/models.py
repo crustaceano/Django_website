@@ -2,14 +2,9 @@ import django.db.models
 # import thumbnail
 from django.db import models
 import django.core.validators
-import django.core.exceptions
+import catalog.validators
 # from string import ascii_lowercase
 # from thumbnail import get_thumbnail
-def custom_text_validator(value):
-    if ('превосходно' not in value) and ('роскошно' not in value):
-        raise django.core.exceptions.ValidationError(
-            'В тексте должно быть слово превосходно или роскошно!!',
-        )
 
 
 # def custom_slug_validator(value):
@@ -77,7 +72,6 @@ class Tag(AbstractModel):
 class Category(AbstractModel):
     slug = django.db.models.SlugField(
         verbose_name='Слаг',
-        unique=True,
         validators=[
             django.core.validators.MaxLengthValidator(200),
         ],
@@ -89,6 +83,7 @@ class Category(AbstractModel):
     )
 
     class Meta:
+        ordering = ('weight', 'id')
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
@@ -101,7 +96,7 @@ class Item(AbstractModel):
         verbose_name='Текст',
         help_text='Опишите объект',
         validators=[
-            custom_text_validator,
+            catalog.validators.custom_text_validator,
         ],
         blank=True,
     )
@@ -115,6 +110,8 @@ class Item(AbstractModel):
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
+        help_text='Выберите категорию',
+        verbose_name='категория',
     )
     tags = models.ManyToManyField(Tag)
 

@@ -6,12 +6,13 @@
         <img class="bi me-4" src="{% static 'img/panda-bear.png'%}" width="50" height="50">
         <span class="fs-4">My shop project</span>
       </a>
-
+      {% with url_name=request.resolver_match.url_name %}
       <ul class="nav nav-pills">
-        <li class="nav-item"><a href="{% url 'homepage:homepage_main' %}" class="nav-link active" aria-current="page">Home</a></li>
-        <li class="nav-item"><a href="{% url 'about:description' %}" class="nav-link">About</a></li>
-        <li class="nav-item"><a href="{% url 'catalog:item_list' %}" class="nav-link">Item list</a></li>
+        <li class="nav-item"><a href="{% url 'homepage:homepage_main' %}" class="nav-link {% if url_name == 'homepage_main' %}active{% endif %}" aria-current="page">Home</a></li>
+        <li class="nav-item"><a href="{% url 'about:description' %}" class="nav-link {% if url_name == 'description' %}active{% endif %}">About</a></li>
+        <li class="nav-item"><a href="{% url 'catalog:item_list' %}" class="nav-link {% if url_name == 'item_list' %}active{% endif %}">Item list</a></li>
       </ul>
+      {% endwith %}
     </header>
   </div>
 </header>
