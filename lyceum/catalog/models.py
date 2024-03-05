@@ -78,6 +78,16 @@ class Category(AbstractModel):
         blank=True,
     )
     weight = django.db.models.PositiveSmallIntegerField(
+        validators=[
+            django.core.validators.MinLengthValidator(
+                1,
+                message='Значение должно быть больше 0',
+            ),
+            django.core.validators.MaxLengthValidator(
+                32767,
+                message='Значение должно быть меньше 32678',
+            )
+        ],
         verbose_name='Вес',
         default=100,
     )
