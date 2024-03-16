@@ -13,8 +13,8 @@
   "pk": 2,
   "fields": {
     "is_published": true,
-    "name": "ќдежда дл€ секса",
-    "slug": "sex-wearing"
+    "name": " уртка",
+    "slug": "jacket"
   }
 },
 {
@@ -22,8 +22,8 @@
   "pk": 1,
   "fields": {
     "is_published": true,
-    "name": "ѕуховик",
-    "slug": "",
+    "name": "autum wearing",
+    "slug": "autum-wearing",
     "weight": 100
   }
 },
@@ -32,8 +32,8 @@
   "pk": 2,
   "fields": {
     "is_published": true,
-    "name": "ќсенн€€ одежда",
-    "slug": "autum-wearing",
+    "name": "√оловные уборы",
+    "slug": "hats",
     "weight": 100
   }
 },
@@ -42,12 +42,66 @@
   "pk": 1,
   "fields": {
     "is_published": true,
-    "name": " урточка",
-    "text": "",
+    "name": " уртка осенн€€",
+    "text": "ќсенн€€ куртка с pinterest, роскошно",
+    "category": 1,
+    "tags": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "catalog.item",
+  "pk": 2,
+  "fields": {
+    "is_published": true,
+    "name": "Ўапка",
+    "text": "превосходно, крута€ шапка, тЄпла€",
     "category": 2,
     "tags": [
       1
     ]
+  }
+},
+{
+  "model": "catalog.mainimage",
+  "pk": 1,
+  "fields": {
+    "image": "catalog/1/4f804c0c-9e38-4dd1-afbb-6ae0200dbe1b-suit_1.jpg",
+    "item": 1
+  }
+},
+{
+  "model": "catalog.mainimage",
+  "pk": 2,
+  "fields": {
+    "image": "catalog/2/3e491fea-2fd2-406d-8323-04050fea3c1e-msg5111509284-61540.jpg",
+    "item": 2
+  }
+},
+{
+  "model": "catalog.image",
+  "pk": 1,
+  "fields": {
+    "image": "catalog/1/02a06318-d2d6-40e3-928b-2ab395b36219-agree_1.jpg",
+    "item": 1
+  }
+},
+{
+  "model": "catalog.image",
+  "pk": 2,
+  "fields": {
+    "image": "catalog/1/ab3cd5b6-7e36-4862-9645-ffc2326a8208-agree_2.jpg",
+    "item": 1
+  }
+},
+{
+  "model": "catalog.image",
+  "pk": 3,
+  "fields": {
+    "image": "catalog/1/3ac80bd1-01f7-4118-a4c9-89dddf51cb98-agree_3.jpg",
+    "item": 1
   }
 }
 ]

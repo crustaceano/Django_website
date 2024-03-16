@@ -1,39 +1,20 @@
+import uuid
+
 import django.db.models
-# import thumbnail
+import sorl.thumbnail
 from django.db import models
 import django.core.validators
 import catalog.validators
+from django.utils.safestring import mark_safe
+
+
 # from string import ascii_lowercase
-# from thumbnail import get_thumbnail
 
 
-# def custom_slug_validator(value):
-#     value = value.lower()
-#     Slug_alphabet = list(map(str, range(10))) + list(ascii_lowercase) + ['-', '_']
-#     for elem in value:
-#         if elem not in Slug_alphabet:
-#             raise django.core.exceptions.ValidationError(
-#                 'В тексте могут использоваться только цифры, буквы латиницы, символы - и _',
-#             )
+def item_directory_path(instance, filename):
+    return f'catalog/{instance.item.id}/{uuid.uuid4()}-{filename}'
 
 
-# class AbstractModel(django.db.models.Model):
-#     name = django.db.models.TextField()
-#
-#     class Meta:
-#         abstract = True
-#
-#
-# class Category(AbstractModel):
-#     pass
-#
-#
-# class Tag(AbstractModel):
-#     pass
-#
-#
-# class ExtendItem(AbstractModel):
-#     pass
 class AbstractModel(django.db.models.Model):
     is_published = django.db.models.BooleanField(
         default=True,
@@ -44,7 +25,6 @@ class AbstractModel(django.db.models.Model):
         validators=[
             django.core.validators.MaxLengthValidator(150),
         ],
-        blank=True,
     )
 
     class Meta:
@@ -79,11 +59,11 @@ class Category(AbstractModel):
     )
     weight = django.db.models.PositiveSmallIntegerField(
         validators=[
-            django.core.validators.MinLengthValidator(
+            django.core.validators.MinValueValidator(
                 1,
                 message='Значение должно быть больше 0',
             ),
-            django.core.validators.MaxLengthValidator(
+            django.core.validators.MaxValueValidator(
                 32767,
                 message='Значение должно быть меньше 32678',
             )
@@ -101,6 +81,22 @@ class Category(AbstractModel):
         return self.name[:15]
 
 
+class ItemManager(django.db.models.Manager):
+    def published(self):
+        (self.get_queryset()
+         .filter(is_published=True)
+         .select_related('category')
+         .order_by('category')
+         .prefetch_related(
+            django.db.models.Prefetch(
+                'tags',
+                queryset=Tag.objects.all(),
+            )
+        )
+         .only('name', 'text', 'category_id', 'category__name')
+         )
+
+
 class Item(AbstractModel):
     text = django.db.models.TextField(
         verbose_name='Текст',
@@ -110,13 +106,6 @@ class Item(AbstractModel):
         ],
         blank=True,
     )
-    # category = django.db.models.ForeignKey(
-    #     'category',
-    #     on_delete=django.db.models.CASCADE,
-    #     related_name='catalog_items',
-    # )
-    # tags = django.db.models.ManyToManyField(Tag)
-    # extend = django.db.models.OneToOneField(ExtendItem)
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
@@ -132,32 +121,75 @@ class Item(AbstractModel):
     def __str__(self):
         return self.name[:15]
 
+    def image_tmb(self):
+        if self.main_image.image:
+            return django.utils.safestring.mark_safe(
+                f'<img src="{self.main_image.get_image_50x50.url}">'
+            )
+        return 'Нет изображения'
+
+    image_tmb.short_description = 'превью'
+    image_tmb.allow_tags = True
+
+
+class ImageBaseModel(django.db.models.Model):
+    image = models.ImageField(
+        'изображение',
+        upload_to=item_directory_path,
+        default=None,
+    )
+
+    def get_image_300x300(self):
+        return sorl.thumbnail.get_thumbnail(
+            self.image,
+            '300x300',
+            crop='center',
+            quality=51,
+        )
+
+    @property
+    def get_image_50x50(self):
+        return sorl.thumbnail.get_thumbnail(
+            self.image,
+            '50x50',
+            crop='center',
+            quality=51,
+        )
+
+    def __str__(self):
+        return self.item.name
+
+    class Meta:
+        abstract = True
+
+
+class MainImage(ImageBaseModel):
+    item = django.db.models.OneToOneField(
+        Item,
+        on_delete=django.db.models.CASCADE,
+        related_name='main_image',
+    )
+
+    def __str__(self):
+        return self.item.name
+
+    class Meta:
+        verbose_name = 'главное изображение'
+        verbose_name_plural = 'главные изображения'
+
+
+class Image(ImageBaseModel):
+    item = django.db.models.ForeignKey(
+        Item,
+        on_delete=django.db.models.CASCADE,
+        related_name='images',
+    )
+
+    class Meta:
+        verbose_name = 'фото'
+        verbose_name_plural = 'фото'
 
 # class MyModel(models.Model):
 #     upload = models.ImageField(upload_to='uploads/')
 #
 #     upload = models.ImageField(upload_to='uploads/% Y/% m/% d/')
-
-# class ImageModel(models.Model):
-#     image = models.ImageField(
-#         'Будет приведено к ширине 1280px',
-#         upload_to='catalog/',
-#     )
-#
-#     def get_image_1280(self):
-#         return get_thumbnail(self.image, '1280', quality=51)
-#
-#     def get_image_400_300(self):
-#         return get_thumbnail(self.image, '400*300', crop='center', quality=51)
-#
-#     def image_tmb(self):
-#         if self.image:
-#             return mark_safe(
-#                 f'<img src="{self.image.url}" width="50">'
-#             )
-#         return 'Нет изображения'
-#     image_tmb.short_description = 'превью'
-#     image_tmb.allow_tags = True
-#     list_display = (
-#         'image_tmb'
-#     )

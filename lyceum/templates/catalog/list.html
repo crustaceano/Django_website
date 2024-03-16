@@ -1,14 +1,25 @@
 {% extends "base.html" %}
-
+{% block title %} Item list {% endblock %}
 {% block content %}
     <div class="container">
         <h1>Это страница со списком товаров</h1>
-        <a href="{% url 'catalog:item_list' %}">
-            Страница со списком товаров
-        </a>
-        <br>
-        <a href="{% url 'catalog:item_detail' 1 %}">
-            Первый елемент
-        </a>
+<!--        <a href="{% url 'catalog:item_list' %}">-->
+<!--            Страница со списком товаров-->
+<!--        </a>-->
+<!--        <br>-->
+<!--        <a href="{% url 'catalog:item_detail' 1 %}">-->
+<!--            Первый елемент-->
+<!--        </a>-->
+        {% for item in items %}
+        <div class="container">
+            <a href="{% url 'catalog:item_detail' item.id %}">
+                <h3>{{item.name}}</h3>
+            </a>
+            <p>{{item.category.name}}</p>
+            <p>{{item.text}}</p>
+        </div>
+        {% empty %}
+            <p>Список пуст, админ, добавь инфы!!</p>
+        {% endfor %}
     </div>
 {% endblock %}
