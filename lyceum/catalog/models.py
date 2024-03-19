@@ -98,6 +98,10 @@ class ItemManager(django.db.models.Manager):
 
 
 class Item(AbstractModel):
+    is_on_main = django.db.models.BooleanField(
+        verbose_name='на главной странице',
+        default=True,
+    )
     text = django.db.models.TextField(
         verbose_name='Текст',
         help_text='Опишите объект',

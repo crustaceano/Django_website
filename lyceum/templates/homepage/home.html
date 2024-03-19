@@ -3,5 +3,18 @@
 {% block content %}
     <div class="container">
         <h1>Это главная страница!!</h1>
+        {% for item in items %}
+        <div class="container">
+            <h3>{{item.name}}</h3>
+            <p>{{item.category.name}}</p>
+            <p>{{item.text}}</p>
+            {% for tag in item.tags.all %}
+            <span class="m-3 d-inline-block">{{tag.name}}</span>
+            {% endfor %}
+            <br>
+        </div>
+        {% empty %}
+            <p>Контента не подвезли((</p>
+        {% endfor %}
     </div>
 {% endblock %}
