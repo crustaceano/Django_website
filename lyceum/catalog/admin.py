@@ -15,7 +15,6 @@ class Image(admin.TabularInline):
     fields = ('image',)
 
 
-# кастомная админка: регистрируем модель ITEM
 @admin.register(catalog.models.Item)
 class ItemAdmin(admin.ModelAdmin):
     list_display = (
