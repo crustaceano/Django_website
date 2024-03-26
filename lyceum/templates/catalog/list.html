@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 {% block title %} Item list {% endblock %}
 {% block content %}
+<h1 class="text-center">Это страница со списком товаров</h1>
 <div class="container">
-    <h1>Это страница со списком товаров</h1>
-    <div class="card-group">
+    <div class="row row-cols-3">
         {% for item in items %}
-        <div class="mt-sm-5 card" style="max-width: 20rem; margin-right: 5rem; border: 1px solid black;">
-            <img class="card-img-top" src="{{item.main_image.get_image_300x300.url}}" alt="Card image cap" style="max-width: 20rem;max-height: 20rem;">
+        <div class="col mt-sm-5 card" style="max-width: 20rem; margin-right: 5rem; border: 1px solid black;">
+            <img class="card-img-top" src="{{item.main_image.get_image_300x300.url}}" alt="Card image cap"
+                 style="max-width: 20rem;max-height: 20rem;">
             <div class="card-body">
                 <h4 class="card-title">{{item.name}}</h4>
                 <p class="card-text">
@@ -20,5 +21,7 @@
         <p>Список пуст, админ, добавь инфы!!</p>
         {% endfor %}
     </div>
+
+
 </div>
 {% endblock %}

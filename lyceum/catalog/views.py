@@ -11,7 +11,9 @@ def item_list(request):
     items = (catalog.models.Item.objects
              .filter(is_published=True)
              .select_related('category')
-             .prefetch_related('tags')
+             .only('name', 'text', 'category__name')
+             .select_related('main_image')
+             # .prefetch_related('tags')
              .order_by('category__name')
              )
     # items = catalog.models.Item.objects.all()

@@ -3,6 +3,7 @@ import parameterized
 import catalog.models
 import django.core.exceptions
 
+
 # Create your tests here.
 class StaticURLTests(django.test.TestCase):
     def test_catalog_endpoint(self):
@@ -78,10 +79,10 @@ class ModelsTests(django.test.TestCase):
 
     @parameterized.parameterized.expand(
         [
-            ('Преврсходно', ),
-            ('Привосходно', ),
-            ('ПреВосх0дно', ),
-            ('Роск!шно', ),
+            ('Преврсходно',),
+            ('Привосходно',),
+            ('ПреВосх0дно',),
+            ('Роск!шно',),
         ]
     )
     def test_negative_text_validator(self, text):
@@ -100,3 +101,65 @@ class ModelsTests(django.test.TestCase):
                 catalog.models.Item.objects.count(),
                 item_counts,
             )
+
+
+class CheckFieldsTestCase(django.test.TestCase):
+    def check_content_value(
+            self,
+            item,
+            exists,
+            prefetched,
+            not_loaded,
+    ):
+        check_dict = item.__dict__
+        for value in exists:
+            self.assertIn(value, check_dict)
+
+        for value in prefetched:
+            self.assertIn(value, check_dict['_prefetched_objects_cache'])
+
+        for value in not_loaded:
+            self.assertNotIn(value, check_dict)
+
+
+class CatalogItemsTests(CheckFieldsTestCase):
+    fixtures = ['data.json']
+
+    def test_items_in_context(self):
+        response = django.test.Client().get('/catalog/')
+        self.assertIn('items', response.context)
+
+    def test_items_size(self):
+        response = django.test.Client().get('/catalog/')
+        self.assertEqual(len(response.context['items']), 2)
+
+    def test_items_types(self):
+        response = django.test.Client().get('/catalog/')
+        self.assertTrue(
+            all(
+                isinstance(
+                    item,
+                    catalog.models.Item,
+                )
+                for item in response.context['items']
+            )
+        )
+
+    # def test_items_loaded_values(self):
+    #     response = django.test.Client().get('/catalog/')
+    #     for item in response.context['items']:
+    #         self.check_content_value(
+    #             item,
+    #             ('name',
+    #              'text',
+    #              'category_id',
+    #              ),
+    #             ('tags', ),
+    #             (
+    #                 'is_on_main',
+    #                 'image',
+    #                 'images',
+    #                 'is_published',
+    #             ),
+    #
+    #         )

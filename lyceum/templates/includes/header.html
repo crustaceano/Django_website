@@ -8,6 +8,9 @@
       </a>
       {% with url_name=request.resolver_match.url_name %}
       <ul class="nav nav-pills">
+        {% if request.user and request.user.is_superuser %}
+        <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link">Admin</a></li>
+        {% endif %}
         <li class="nav-item"><a href="{% url 'homepage:homepage_main' %}" class="nav-link {% if url_name == 'homepage_main' %}active{% endif %}" aria-current="page">Home</a></li>
         <li class="nav-item"><a href="{% url 'about:description' %}" class="nav-link {% if url_name == 'description' %}active{% endif %}">About</a></li>
         <li class="nav-item"><a href="{% url 'catalog:item_list' %}" class="nav-link {% if url_name == 'item_list' %}active{% endif %}">Item list</a></li>

@@ -4,5 +4,8 @@
     <div class="container">
         <h1>{{item.name}}</h1>
         <img src={{item.main_image.get_image_300x300.url}}>
+        <p>
+            <a href="{% url 'download:file' item.main_image.get_image_300x300 %}" class="btn btn-lg btn-primary">Скачать изображение</a>
+        </p>
     </div>
 {% endblock %}
